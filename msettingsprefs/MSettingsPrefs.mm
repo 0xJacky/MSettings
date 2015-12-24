@@ -2,9 +2,6 @@
 #import <SettingsKit/SKListControllerProtocol.h>
 #import <SettingsKit/SKTintedListController.h>
 #import <SettingsKit/SKSharedHelper.h>
-#import <Social/Social.h>
-#import <UIKit/UIKit.h>
-#include <stdlib.h>
 
 #define kUrl_VisitWebSite @"http://jackyu.cn"
 #define kUrl_MailTo @"jacky-943572677@qq.com"
