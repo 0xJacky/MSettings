@@ -1,0 +1,10 @@
+{
+	entry = {
+		bundle = MSettingsPrefs;
+		cell = PSLinkCell;
+		detail = "MSettingsPrefsListController";
+		icon = "MSettingsPrefs.png";
+		isController = 1;
+		label = "MSettings \U6df1\U5ea6\U5b9a\U5236";
+	};
+}

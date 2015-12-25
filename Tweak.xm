@@ -11,7 +11,7 @@ inline bool GetBool(NSString *key)
 %hook SBIconListPageControl
 -(id)initWithFrame:(CGRect)arg {
 	if(GetBool(@"HideTurnPoint")) {
-		return NULL;
+		return nil;
 	}
 	return %orig;
 }
@@ -21,6 +21,7 @@ inline bool GetBool(NSString *key)
 %hook SBDockView
 -(void)layoutSubviews {
 	if(GetBool(@"HideDockBg")) {
+		return;
 	}
 	%orig;
 }
@@ -30,7 +31,7 @@ inline bool GetBool(NSString *key)
 %hook SBSpotlightSettings
 -(bool)enableSpotlightOnMinusPage {
 	if(GetBool(@"DisableLeftSearch")) {
-		return FALSE;
+		return NO;
 	}
 	return %orig;
 }
@@ -40,7 +41,7 @@ inline bool GetBool(NSString *key)
 %hook SBSearchScrollView
 -(bool)gestureRecognizerShouldBegin:(id)arg {
 	if(GetBool(@"DisableDownSearch")) {
-		return FALSE;
+		return NO;
 	}
 	return %orig;
 }
@@ -81,7 +82,7 @@ inline bool GetBool(NSString *key)
 -(BOOL)supportsApplicationType:(int)arg {
 	if(GetBool(@"ForceAppFit"))
 	{
-		return TRUE;
+		return YES;
 	}
 	return %orig;
 }
@@ -102,7 +103,7 @@ inline bool GetBool(NSString *key)
 %hook SBTelephonyManager
 -(bool)_lteConnectionShows4G {
 	if(GetBool(@"ShowsLTE")) {
-		return FALSE;
+		return NO;
 	}
 	return %orig;
 }
@@ -112,7 +113,7 @@ inline bool GetBool(NSString *key)
 %hook UIStatusBarForegroundStyleAttributes
 -(BOOL)canShowBreadcrumbs {
 	if(GetBool(@"HideBackTo")) {
-		return FALSE;
+		return NO;
 	}
 	return %orig;
 }
@@ -132,8 +133,19 @@ inline bool GetBool(NSString *key)
 %hook UITextField
 -(void)setSecureTextEntry:(BOOL)arg1 {
 	if(GetBool(@"AllBoardPass")) {
-		arg1 = FALSE;
+		arg1 = 0;
 		return %orig(arg1);
+	}
+	return %orig;
+}
+
+%end
+
+//禁止控制中心回弹
+%hook SBControlCenterSettings
+-(bool)useNewBounce {
+	if(GetBool(@"DisableCCBounce")) {
+		return NO;
 	}
 	return %orig;
 }
@@ -146,7 +158,7 @@ inline bool GetBool(NSString *key)
 %hook PSSearchController
 -(void)setSearchBarVisible:(BOOL)arg1 animated:(BOOL)arg2 {
 	if(GetBool(@"MakesSettingsTop")) {
-		arg1 = TRUE;
+		arg1 = 1;
 		return %orig(arg1, arg2);
 	}
 	%orig;
@@ -157,7 +169,7 @@ inline bool GetBool(NSString *key)
 %hook PhoneTabBarController
 -(void)showFavoritesTab:(BOOL)arg1 recentsTab:(BOOL)arg2 contactsTab:(BOOL)arg3 keypadTab:(BOOL)arg4 voicemailTab:(BOOL)arg5 {
 	if(GetBool(@"HideFavorite")) {
-		arg1 = FALSE;
+		arg1 = NO;
 		return %orig(arg1, arg2, arg3, arg4, arg5);
 	}
 	%orig;
