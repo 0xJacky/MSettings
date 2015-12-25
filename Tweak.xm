@@ -1,160 +1,178 @@
+//动态写法
 #define PLIST_PATH @"/var/mobile/Library/Preferences/apt.sun.msettings.plist"
 inline bool GetBool(NSString *key)
 {
-return [[[NSDictionary dictionaryWithContentsOfFile:PLIST_PATH] valueForKey:key] boolValue];
+	return [[[NSDictionary dictionaryWithContentsOfFile:PLIST_PATH] valueForKey:key] boolValue];
 }
-//Springboard
+
+//SpringBoard
+
+//隐藏翻页小白点
 %hook SBIconListPageControl
 -(id)initWithFrame:(CGRect)arg {
-if(GetBool(@"HideTurnPoint")) {
-return NULL;
-}
-return %orig;
+	if(GetBool(@"HideTurnPoint")) {
+		return NULL;
+	}
+	return %orig;
 }
 %end
 
+//隐藏Dock背景
 %hook SBDockView
 -(void)layoutSubviews {
-if(GetBool(@"HideDockBg")) {
-}
-%orig;
+	if(GetBool(@"HideDockBg")) {
+	}
+	%orig;
 }
 %end
 
+//隐藏左侧搜索
 %hook SBSpotlightSettings
 -(bool)enableSpotlightOnMinusPage {
-   if(GetBool(@"DisableLeftSearch")) {
-        return FALSE;
-}
-return %orig;
+	if(GetBool(@"DisableLeftSearch")) {
+		return FALSE;
+	}
+	return %orig;
 }
 %end
 
+//隐藏下拉搜索
 %hook SBSearchScrollView
 -(bool)gestureRecognizerShouldBegin:(id)arg {
-if(GetBool(@"DisableDownSearch")) {
-return FALSE;
-}
-return %orig;
+	if(GetBool(@"DisableDownSearch")) {
+		return FALSE;
+	}
+	return %orig;
 }
 %end
 
+//隐藏通知中心提供商
 %hook SBTodayViewController
 -(id)todayTableFooterView {
-if(GetBool(@"HideNCLogo")) {
-return NULL;
-}
-return %orig;
+	if(GetBool(@"HideNCLogo")) {
+		return NULL;
+	}
+	return %orig;
 }
 %end
 
+//隐藏通知中心分割线
 %hook SBNotificationSeparatorView
 -(id)initWithFrame:(struct CGRect)arg1 mode:(long long)arg2 {
-if(GetBool(@"HideNCLine")) {
-return NULL;
-}
-return %orig;
+	if(GetBool(@"HideNCLine")) {
+		return NULL;
+	}
+	return %orig;
 }
 %end
 
+//隐藏全局分割线
 %hook UITableView
 -(void)setSeparatorColor:(id)arg {
-if(GetBool(@"HideGlobalLine")) {
-return;
-}
-return %orig;
+	if(GetBool(@"HideGlobalLine")) {
+		return;
+	}
+	return %orig;
 }
 %end
 
+//强制分辨率
 %hook SBApplication
 -(BOOL)supportsApplicationType:(int)arg {
-if(GetBool(@"ForceAppFit"))
-{
-return TRUE;
-}
-return %orig;
+	if(GetBool(@"ForceAppFit"))
+	{
+		return TRUE;
+	}
+	return %orig;
 }
 %end
 
+//状态栏大小不变
 %hook SBLockScreenViewController
 -(int) statusBarStyle {
-    if(GetBool(@"SameStatusBar"))
-{
-        return 0;
-}
-return %orig;
+	if(GetBool(@"SameStatusBar"))
+	{
+		return 0;
+	}
+	return %orig;
 }
 %end
 
+//LTE标识
 %hook SBTelephonyManager
 -(bool)_lteConnectionShows4G {
-    if(GetBool(@"ShowsLTE")) {
-        return FALSE;
-}
-return %orig;
+	if(GetBool(@"ShowsLTE")) {
+		return FALSE;
+	}
+	return %orig;
 }
 %end
 
+//隐藏返回xxx
 %hook UIStatusBarForegroundStyleAttributes
 -(BOOL)canShowBreadcrumbs {
-if(GetBool(@"HideBackTo")) {
-return FALSE;
-}
-return %orig;
+	if(GetBool(@"HideBackTo")) {
+		return FALSE;
+	}
+	return %orig;
 }
 %end
 
+//黑色键盘
 %hook UITextInputTraits
 -(long long)keyboardAppearance {
-if(GetBool(@"BlackKeyBoard")) {
-return 1;
-}
-return %orig;
+	if(GetBool(@"BlackKeyBoard")) {
+		return 1;
+	}
+	return %orig;
 }
 %end
 
+//第三方输入法输密码
 %hook UITextField
 -(void)setSecureTextEntry:(BOOL)arg1 {
-if(GetBool(@"AllBoardPass")) {
-arg1 = FALSE;
-return %orig(arg1);
-}
-return %orig;
+	if(GetBool(@"AllBoardPass")) {
+		arg1 = FALSE;
+		return %orig(arg1);
+	}
+	return %orig;
 }
 
 %end
 
 //Settings
+
+//设置自动置顶
 %hook PSSearchController
 -(void)setSearchBarVisible:(BOOL)arg1 animated:(BOOL)arg2 {
-if(GetBool(@"MakesSettingsTop")) {
-arg1 = TRUE;
-return %orig(arg1, arg2);
-}
-%orig;
+	if(GetBool(@"MakesSettingsTop")) {
+		arg1 = TRUE;
+		return %orig(arg1, arg2);
+	}
+	%orig;
 }
 %end
 
-//Phone
+//Phone 隐藏收藏、默认拨号界面
 %hook PhoneTabBarController
 -(void)showFavoritesTab:(BOOL)arg1 recentsTab:(BOOL)arg2 contactsTab:(BOOL)arg3 keypadTab:(BOOL)arg4 voicemailTab:(BOOL)arg5 {
-if(GetBool(@"HideFavorite")) {
-arg1 = FALSE;
-return %orig(arg1, arg2, arg3, arg4, arg5);
-}
-%orig;
+	if(GetBool(@"HideFavorite")) {
+		arg1 = FALSE;
+		return %orig(arg1, arg2, arg3, arg4, arg5);
+	}
+	%orig;
 }
 -(int)defaultTabViewType {
-if(GetBool(@"AlwaysDialPad")) {
-return 4;
-}
-return %orig;
+	if(GetBool(@"AlwaysDialPad")) {
+		return 4;
+	}
+	return %orig;
 }
 
 -(int)currentTabViewType {
-if(GetBool(@"AlwaysDialPad")) {
-return 4;
-}
-return %orig;
+	if(GetBool(@"AlwaysDialPad")) {
+		return 4;
+	}
+	return %orig;
 }
 %end
