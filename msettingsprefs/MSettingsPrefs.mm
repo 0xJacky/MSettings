@@ -159,11 +159,20 @@
  			@"PostNotification": @"MSettings/reloadSettings",
  			@"cellClass": @"SKTintedSwitchCell"
  		},
- 		@{
+        @{
+            @"cell": @"PSSwitchCell",
+            @"default": @NO,
+            @"defaults": @"apt.sun.msettings",
+            @"key": @"HideLockScreenGrabber",
+            @"label": @"隐藏锁屏上下横杠",
+            @"PostNotification": @"MSettings/reloadSettings",
+            @"cellClass": @"SKTintedSwitchCell"
+        },
+		@{
  			@"cell": @"PSGroupCell",
  			@"label": @"Spotlight 搜索设置",
  		},
- 		@{
+		@{
  			@"cell": @"PSSwitchCell",
  			@"default": @NO,
  			@"defaults": @"apt.sun.msettings",
@@ -178,6 +187,28 @@
  			@"defaults": @"apt.sun.msettings",
  			@"key": @"DisableDownSearch",
  			@"label": @"禁用下拉 Spotlight 搜索",
+ 			@"PostNotification": @"MSettings/reloadSettings",
+ 			@"cellClass": @"SKTintedSwitchCell"
+ 		},
+ 		@{
+ 			@"cell": @"PSGroupCell",
+ 			@"label": @"程序切换器透明设置",
+ 		},
+		@{
+ 			@"cell": @"PSSwitchCell",
+ 			@"default": @NO,
+ 			@"defaults": @"apt.sun.msettings",
+ 			@"key": @"HideSwitcherBgDarkeningFactor",
+ 			@"label": @"背景透明",
+ 			@"PostNotification": @"MSettings/reloadSettings",
+ 			@"cellClass": @"SKTintedSwitchCell"
+ 		},
+		@{
+ 			@"cell": @"PSSwitchCell",
+ 			@"default": @NO,
+ 			@"defaults": @"apt.sun.msettings",
+ 			@"key": @"HideSwitcherCardDarkeningFactor",
+ 			@"label": @"主屏幕卡透明",
  			@"PostNotification": @"MSettings/reloadSettings",
  			@"cellClass": @"SKTintedSwitchCell"
  		},
@@ -312,7 +343,7 @@
 		@{
 			@"cell": @"PSGroupCell",
 			@"label": @"设置",
-			@"footerText": @"[iOS 9] 开启后，打开设置时，设置页面会从顶部开始显示并且默认隐藏搜索栏，稍稍下拉即可看到搜索栏"
+			@"footerText": @"[iOS 9 设置自动置顶] 开启后，打开设置时，设置页面会从顶部开始显示并且默认隐藏搜索栏，稍稍下拉即可看到搜索栏"
 		},
 		@{
 			@"cell": @"PSSwitchCell",
@@ -320,6 +351,24 @@
 			@"defaults": @"apt.sun.msettings",
 			@"key": @"MakesSettingsTop",
 			@"label": @"设置自动置顶",
+			@"PostNotification": @"MSettings/reloadSettings",
+			@"cellClass": @"SKTintedSwitchCell"
+		},
+		@{
+			@"cell": @"PSSwitchCell",
+			@"default": @NO,
+			@"defaults": @"apt.sun.msettings",
+			@"key": @"HideSetingsSearch",
+			@"label": @"隐藏设置搜索栏",
+			@"PostNotification": @"MSettings/reloadSettings",
+			@"cellClass": @"SKTintedSwitchCell"
+		},
+		@{
+			@"cell": @"PSSwitchCell",
+			@"default": @NO,
+			@"defaults": @"apt.sun.msettings",
+			@"key": @"HideAppSettings",
+			@"label": @"隐藏设置应用程序列表",
 			@"PostNotification": @"MSettings/reloadSettings",
 			@"cellClass": @"SKTintedSwitchCell"
 		},
