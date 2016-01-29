@@ -1,9 +1,9 @@
 Package: apt.sun.msettings
 Name: MSettings
-Depends: mobilesubstrate
-Version: 1.2
+Depends: mobilesubstrate, preferenceloader
+Version: 1.5
 Architecture: iphoneos-arm
-Description: 一个简洁而使用的系统优化插件
+Description: 一个简洁而实用的系统优化插件
 Maintainer: Jacky
 Author: Jacky
-Section: Tweaks
+Section: 插件 - Tweaks

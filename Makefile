@@ -2,6 +2,7 @@ ARCHS = armv7 arm64
 include theos/makefiles/common.mk
 TWEAK_NAME = MSettings
 MSettings_FILES = Tweak.xm
+MSettings_FRAMEWORKS = UIKit Foundation
 
 include $(THEOS_MAKE_PATH)/tweak.mk
 
