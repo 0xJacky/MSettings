@@ -4,28 +4,6 @@
 #define kCFCoreFoundationVersionNumber_iOS_9_0 1240.10
 #endif
 
-@interface PSSearchController
-- (void)setSearchBarVisible:(BOOL)arg1 animated:(BOOL)arg2;
-@end
-
-@interface prefsListController: UIViewController
-- (void) _loadThirdPartySpecifierslfNecessaryWithCompletion:(id)arg1;
-- (void) _loadThirdPartySpecifiersWithCompletion:(id)arg2;
-- (void) _reallyLoadThirdPartySpecifiersForProxies:(id)arg;
-@end
-
-@interface PSUIPrefsListController : UIViewController
-- (void) _loadThirdPartySpecifierslfNecessaryWithCompletion:(id)arg1;
-- (void) _loadThirdPartySpecifiersWithCompletion:(id)arg2;
-- (void) _reallyLoadThirdPartySpecifiersForProxies:(id)arg;
-@end
-
-@interface PhoneTabBarController
-- (void)showFavoritesTab:(BOOL)arg1 recentsTab:(BOOL)arg2 contactsTab:(BOOL)arg3 keypadTab:(BOOL)arg4 voicemailTab:(BOOL)arg5;
-- (int)defaultTabViewType;
-- (int)currentTabViewType;
-@end
-
 static BOOL Enabled = YES;
 
 static BOOL HideTurnPoint = NO;
@@ -568,7 +546,7 @@ static void initPrefs()
 }
 %end
 //隐藏设置应用程序列表
-%group iOS9
+%group iOS78
 %hook PrefsListController
 - (void)_loadThirdPartySpecifierslfNecessaryWithCompletion:(id)arg1 {
 	if(HideAppSettings && Enabled) {
@@ -592,7 +570,7 @@ static void initPrefs()
 %end
 %end
 
-%group iOS78
+%group iOS9
 %hook PSUIPrefsListController
 - (void)_loadThirdPartySpecifierslfNecessaryWithCompletion:(id)arg1 {
 	if(HideAppSettings && Enabled) {
