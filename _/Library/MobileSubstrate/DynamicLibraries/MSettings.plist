@@ -4,7 +4,6 @@
 			"com.apple.springboard",
 			"com.apple.Preferences",
 			"com.apple.mobilephone",
-			"com.apple.UIKit",
 		);
 	};
 }

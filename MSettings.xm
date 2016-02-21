@@ -12,13 +12,9 @@ static BOOL DisableLeftSearch = NO;
 static BOOL DisableDownSearch = NO;
 static BOOL HideNCLogo = NO;
 static BOOL HideNCLine = NO;
-static BOOL HideGlobalLine = NO;
 static BOOL ForceAppFit = NO;
 static BOOL SameStatusBar = NO;
 static BOOL ShowsLTE = NO;
-static BOOL HideBackTo = NO;
-static BOOL BlackKeyBoard = NO;
-static BOOL AllBoardPass = NO;
 static BOOL DisableCCBounce = NO;
 static BOOL HideLockScreenGrabber = NO;
 static BOOL HideSwitcherBgDarkeningFactor = NO;
@@ -60,13 +56,9 @@ static void initPrefs()
 		DisableDownSearch = ([prefs objectForKey:@"DisableDownSearch"] ? [[prefs objectForKey:@"DisableDownSearch"] boolValue] : DisableDownSearch );
 		HideNCLogo = ([prefs objectForKey:@"HideNCLogo"] ? [[prefs objectForKey:@"HideNCLogo"] boolValue] : HideNCLogo );
 		HideNCLine = ([prefs objectForKey:@"HideNCLine"] ? [[prefs objectForKey:@"HideNCLine"] boolValue] : HideNCLine );
-		HideGlobalLine = ([prefs objectForKey:@"HideGlobalLine"] ? [[prefs objectForKey:@"HideGlobalLine"] boolValue] : HideGlobalLine );
 		ForceAppFit = ([prefs objectForKey:@"ForceAppFit"] ? [[prefs objectForKey:@"ForceAppFit"] boolValue] : ForceAppFit );
 		SameStatusBar = ([prefs objectForKey:@"SameStatusBar"] ? [[prefs objectForKey:@"SameStatusBar"] boolValue] : SameStatusBar );
 		ShowsLTE = ([prefs objectForKey:@"ShowsLTE"] ? [[prefs objectForKey:@"ShowsLTE"] boolValue] : ShowsLTE );
-		HideBackTo = ([prefs objectForKey:@"HideBackTo"] ? [[prefs objectForKey:@"HideBackTo"] boolValue] : HideBackTo );
-		BlackKeyBoard = ([prefs objectForKey:@"BlackKeyBoard"] ? [[prefs objectForKey:@"BlackKeyBoard"] boolValue] : BlackKeyBoard );
-		AllBoardPass = ([prefs objectForKey:@"AllBoardPass"] ? [[prefs objectForKey:@"AllBoardPass"] boolValue] : AllBoardPass );
 		DisableCCBounce = ([prefs objectForKey:@"DisableCCBounce"] ? [[prefs objectForKey:@"DisableCCBounce"] boolValue] : DisableCCBounce );
 		HideLockScreenGrabber = ([prefs objectForKey:@"HideLockScreenGrabber"] ? [[prefs objectForKey:@"HideLockScreenGrabber"] boolValue] : HideLockScreenGrabber );
 		HideSwitcherBgDarkeningFactor = ([prefs objectForKey:@"HideSwitcherBgDarkeningFactor"] ? [[prefs objectForKey:@"HideSwitcherBgDarkeningFactor"] boolValue] : HideSwitcherBgDarkeningFactor );
@@ -105,9 +97,9 @@ static void initPrefs()
 	if (![manager fileExistsAtPath:DPKG_PATH]) {
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"警告"
 			message:@"软件包标示符被篡改！意味着你安装的不是来自官方源的 MSettings\n请添加 S™ 中文源（http://apt.Sunbelife.com)来获取官方版本!"
-		delegate:nil
-		cancelButtonTitle:@"好的"
-		otherButtonTitles:nil];
+			delegate:nil
+			cancelButtonTitle:@"好的"
+			otherButtonTitles:nil];
 		[alert show];
 		[alert release];
 	}
@@ -173,16 +165,6 @@ static void initPrefs()
 }
 %end
 
-//隐藏全局分割线
-%hook UITableView
-- (void)setSeparatorColor:(id)arg {
-	if(HideGlobalLine && Enabled) {
-		return;
-	}
-	%orig;
-}
-%end
-
 //强制分辨率
 %hook SBApplication
 - (BOOL)supportsApplicationType:(int)arg {
@@ -235,37 +217,6 @@ static void initPrefs()
 	return %orig;
 }
 %end
-
-//隐藏返回xxx
-%hook UIStatusBarForegroundStyleAttributes
-- (BOOL)canShowBreadcrumbs {
-	if(HideBackTo && Enabled) {
-		return NO;
-	}
-	return %orig;
-}
-%end
-
-//黑色键盘
-%hook UITextInputTraits
-- (long long)keyboardAppearance {
-	if(BlackKeyBoard && Enabled) {
-		return 1;
-	}
-	return %orig;
-}
-%end
-
-//第三方输入法输密码
-%hook UITextField
-- (void)setSecureTextEntry:(BOOL)arg1 {
-	if(AllBoardPass && Enabled) {
-		arg1 = 0;
-	}
-	%orig;
-}
-%end
-
 //禁止控制中心回弹
 %hook SBControlCenterSettings
 - (bool)useNewBounce {
@@ -312,6 +263,12 @@ static void initPrefs()
 		return;
 	}
 	%orig;
+}
+- (id)_defaultSlideToUnlockText {
+	if(HideUnlockSlider && Enabled) {
+		return nil;
+	}
+	return %orig;
 }
 %end
 //iOS 多任务背景去磨砂

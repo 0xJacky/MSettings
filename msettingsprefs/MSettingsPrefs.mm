@@ -478,7 +478,7 @@
 -(BOOL) tintNavigationTitleText { return NO; }
 -(BOOL) shiftHeartImage { return NO; }
 
--(NSString*) headerText { return @"Notification Center"; }
+-(NSString*) headerText { return @"Notifications"; }
 -(NSString*) headerSubText { return @"通知中心"; }
 -(NSString*) customTitle { return @"通知中心"; }
 -(NSArray*) customSpecifiers
@@ -711,7 +711,7 @@
 		@{
 			@"cell" : @"PSGroupCell",
 			@"alignment" : @"1",
-			@"label" : @"更改系统程序的设置开关后，您需要重启对应的程序",
+			@"label" : @"更改系统程序的设置后需要重启对应的程序",
 		},
 		];
 }
