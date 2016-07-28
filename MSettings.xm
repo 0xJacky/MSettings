@@ -40,6 +40,9 @@ static BOOL HideLCCamera = NO;
 static BOOL HideNCCalendar = NO;
 static BOOL HideLunarDate = NO;
 static BOOL HideNCConfigureButton = NO;
+static BOOL hideOperator = NO;
+static NSString *customOperator;
+static NSString *customUnlockText;
 
 static CGFloat Animationspeed = 0.5;
 NSFileManager *manager = [NSFileManager defaultManager];
@@ -85,9 +88,14 @@ static void initPrefs()
 		HideNCCalendar = ([prefs objectForKey:@"HideNCCalendar"] ? [[prefs objectForKey:@"HideNCCalendar"] boolValue] : HideNCCalendar );
 		HideLunarDate = ([prefs objectForKey:@"HideLunarDate"] ? [[prefs objectForKey:@"HideLunarDate"] boolValue] : HideLunarDate );
 		HideNCConfigureButton = ([prefs objectForKey:@"HideNCConfigureButton"] ? [[prefs objectForKey:@"HideNCConfigureButton"] boolValue] : HideNCConfigureButton );
+		hideOperator = ([prefs objectForKey:@"hideOperator"] ? [[prefs objectForKey:@"hideOperator"] boolValue] : hideOperator );
+		customOperator = ([prefs objectForKey:@"customOperator"] ? [prefs objectForKey:@"customOperator"] : customOperator);
+		customUnlockText = ([prefs objectForKey:@"customUnlockText"] ? [prefs objectForKey:@"customUnlockText"] : customUnlockText);
 	}
 
 	[prefs release];
+	[customOperator retain];
+	[customUnlockText retain];
 }
 /* SpringBoard */
 //Do a check for DPKG_PATH
@@ -96,7 +104,7 @@ static void initPrefs()
 	%orig;
 	if (![manager fileExistsAtPath:DPKG_PATH]) {
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"警告"
-			message:@"软件包标示符被篡改！意味着你安装的不是来自官方源的 MSettings\n请添加 S™ 中文源（http://apt.Sunbelife.com)来获取官方版本!"
+			message:@"MSettings 的软件包标示符被篡改！\n意味着你安装的不是来自官方源的 MSettings\n请添加 S™ 中文源（http://apt.Sunbelife.com)来获取官方版本!"
 			delegate:nil
 			cancelButtonTitle:@"好的"
 			otherButtonTitles:nil];
@@ -193,12 +201,16 @@ static void initPrefs()
 	%orig;
 }
 //锁屏 隐藏滑动解锁文字
-- (id)_defaultSlideToUnlockText {
+/*- (id)_defaultSlideToUnlockText {
 	if (HideUnlockText && Enabled) {
 		return nil;
 	}
+	if (Enabled && customUnlockText) {
+
+	    return customUnlockText;
+	}
 	return %orig;
-}
+}*/
 %end
 %hook SBLockScreenNowPlayingPluginController
 - (id)initWithLockScreenViewController:(id)arg1 mediaController:(id)arg2 {
@@ -215,6 +227,19 @@ static void initPrefs()
 		return NO;
 	}
 	return %orig;
+}
+//自定义运营商
+- (void)_reallySetOperatorName:(id)arg {
+		if (!Enabled || customOperator == nil || [customOperator isEqualToString:@""])
+		{
+				%orig(arg);
+		}	else if (Enabled && hideOperator) { //隐藏
+				arg = @"";
+				%orig(arg);
+		} else if (Enabled && customOperator) {
+				arg = customOperator;
+				%orig(arg);
+		}
 }
 %end
 //禁止控制中心回弹
@@ -265,8 +290,13 @@ static void initPrefs()
 	%orig;
 }
 - (id)_defaultSlideToUnlockText {
-	if(HideUnlockSlider && Enabled) {
+	if (HideUnlockText && Enabled) {
 		return nil;
+	}	else if (!Enabled || customUnlockText == nil || [customUnlockText isEqualToString:@""]) {
+		return %orig;
+	}
+	if (Enabled && customUnlockText) {
+	    return customUnlockText;
 	}
 	return %orig;
 }
@@ -340,20 +370,20 @@ static void initPrefs()
 %hook SBFadeAnimationSettings
 - (CGFloat) backlightFadeDuration {
 	if (enableAnimationspeed && Enabled) {
-		if (Animationspeed <= 0.30) 
+		if (Animationspeed <= 0.30)
 		{
 			return 0.1;
-		} 
-		else if (Animationspeed <= 0.10) 
+		}
+		else if (Animationspeed <= 0.10)
 		{
 			return 0.0;
 		}
-		else 
+		else
 		{
 			return 0.2;
 		}
-	} 
-	else 
+	}
+	else
 	{
 		return %orig();
 	}
@@ -510,7 +540,7 @@ static void initPrefs()
 		return;
 	}
 	%orig;
-	
+
 }
 - (void)_loadThirdPartySpecifiersWithCompletion:(id)arg2 {
 	if(HideAppSettings && Enabled) {
@@ -534,7 +564,7 @@ static void initPrefs()
 		return;
 	}
 	%orig;
-	
+
 }
 - (void)_loadThirdPartySpecifiersWithCompletion:(id)arg2 {
 	if(HideAppSettings && Enabled) {
@@ -572,7 +602,8 @@ static void initPrefs()
 	return %orig;
 }
 %end
-%ctor 
+
+%ctor
 {
 	CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)initPrefs, CFSTR("apt.sun.msettings/settingschanged"), NULL, CFNotificationSuspensionBehaviorCoalesce);
 	initPrefs();

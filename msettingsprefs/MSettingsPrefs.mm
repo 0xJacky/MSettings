@@ -2,6 +2,7 @@
 #import <SettingsKit/SKListControllerProtocol.h>
 #import <SettingsKit/SKTintedListController.h>
 #import <SettingsKit/SKSharedHelper.h>
+#import <spawn.h>
 
 #define kUrl_VisitWebSite @"http://jackyu.cn"
 #define kUrl_Weibo @"1750883770"
@@ -110,23 +111,24 @@
 			@"cellClass" : @"SKTintedCell",
 		},
 		@{
-			@"alignment" : @"2",
 			@"cell" : @"PSButtonCell",
+			@"alignment" : @"2",
 			@"label" : @"应用设置",
-			@"action" : @"respring",
+			@"action" : @"respring:",
 		},
 		@{
 			@"cell" : @"PSGroupCell",
-			@"label" : @"",
+			@"label" : @"关于",
 		},
 		@{
-			@"cell" : @"PSStaticTextCell",
-			@"label" : @"版本：1.5",
+			@"cell" : @"PSTitleValueCell",
+			@"label" : @"版本：1.6",
 			@"cellClass" : @"SKTintedCell",
 		},
 		@{
 			@"cell" : @"PSLinkListCell",
 			@"label" : @"软件信息",
+			@"cellClass" : @"SKTintedCell",
 			@"detail" : @"MSettingsPrefsAboutListController",
 			@"cellClass" : @"SKTintedCell",
 		},
@@ -142,7 +144,7 @@
 		},
 		@{
 			@"cell" : @"PSButtonCell",
-			@"label" : @"关注@Jacky多啦果粉",
+			@"label" : @"关注 @0xJacky",
 			@"icon" : @"weibo.png",
 			@"action" : @"visitWeiBo:",
 		},
@@ -152,7 +154,7 @@
 			@"icon" : @"donate.png",
 			@"action" : @"makeDonation:",
 		},
-		@{ 
+		@{
 			@"cell" : @"PSGroupCell",
 			@"alignment" : @"1",
 			@"label" : @"MSettings © 2016 By Jacky\n来自 S™ 中文源",
@@ -160,19 +162,26 @@
 		];
 }
 
--(void) respring {
+-(void) respring:(PSSpecifier *)specifier {
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示"
 		message:@"请点击\"立即注销\"以应用设置"
 		delegate:self
 		cancelButtonTitle:@"取消"
 		otherButtonTitles:@"立即注销",nil];
+		alert.tag = 0;
 	[alert show];
 }
 
 -(void) alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-	if (buttonIndex == 1) {
-		system("killall -9 SpringBoard");
-	}
+	if (alertView.tag == 0) {
+		if (buttonIndex == 1) {
+			 pid_t pid;
+			 int status;
+			 const char* args[] = {"killall", "-9", "SpringBoard", "backboardd", NULL};
+			 posix_spawn(&pid, "/usr/bin/killall", NULL, NULL, (char* const*)args, NULL);
+			 waitpid(pid, &status, WEXITED);
+		 }
+	 }
 }
 
 - (void) visitWebSite:(PSSpecifier *)specifier {
@@ -349,11 +358,46 @@
 		@{
 			@"cell" : @"PSSwitchCell",
 			@"default" : @NO,
+			@"defaults" : @"com.apple.springboard",
+			@"key" : @"SBShowGSMRSSI",
+			@"label" : @"显示数字信号",
+			@"PostNotification" : @"MSettings/reloadSettings",
+			@"cellClass" : @"SKTintedSwitchCell",
+		},
+		@{
+			@"cell" : @"PSSwitchCell",
+			@"default" : @NO,
 			@"defaults" : @"apt.sun.msettings",
 			@"key" : @"ShowsLTE",
 			@"label" : @"状态栏 4G 标识改为 LTE",
 			@"PostNotification" : @"MSettings/reloadSettings",
 			@"cellClass" : @"SKTintedSwitchCell",
+		},
+		@{
+			@"cell" : @"PSSwitchCell",
+			@"default" : @NO,
+			@"defaults" : @"apt.sun.msettings",
+			@"key" : @"hideOperator",
+			@"label" : @"隐藏运营商",
+			@"PostNotification" : @"MSettings/reloadSettings",
+			@"cellClass" : @"SKTintedSwitchCell",
+		},
+		@{
+			@"cell" : @"PSGroupCell",
+			@"label" : @"",
+			@"footerText" : @"留空为不启用，且同时启用隐藏运营商时则会优先隐藏隐藏运营商"
+		},
+		@{
+			@"cell" : @"PSEditTextCell",
+			@"default" : @"",
+			@"defaults" : @"apt.sun.msettings",
+			@"key" : @"customOperator",
+			@"label" : @"自定义运营商名称",
+			@"PostNotification" : @"MSettings/reloadSettings",
+		},
+		@{
+			@"cell" : @"PSGroupCell",
+			@"label" : @"",
 		},
 		@{
 			@"cell" : @"PSSwitchCell",
@@ -459,6 +503,19 @@
 			@"label" : @"隐藏相机按钮",
 			@"PostNotification" : @"MSettings/reloadSettings",
 			@"cellClass" : @"SKTintedSwitchCell",
+		},
+		@{
+			@"cell" : @"PSGroupCell",
+			@"label" : @"",
+			@"footerText" : @"留空为不启用，且同时启用隐藏解锁文字时则会优先隐藏解锁文字"
+		},
+		@{
+			@"cell" : @"PSEditTextCell",
+			@"default" : @"",
+			@"defaults" : @"apt.sun.msettings",
+			@"key" : @"customUnlockText",
+			@"label" : @"自定义解锁文字",
+			@"PostNotification" : @"MSettings/reloadSettings",
 		},
 		];
 }
@@ -750,14 +807,14 @@
 		@{
 			@"cell" : @"PSGroupCell",
 			@"label" : @"",
-			@"footerText" : @"欢迎您使用 MSettings\n\nMSettings 是一个深度系统定制插件，我们会不定期给TA增加新的功能\n\n感谢您的支持 ^-^\n\n注意：本插件仅供个人在 AGPL 开源协议的限制下免费使用\n\n特别感谢 @Sunbelife 设计的图标\n\n以及 Rain. 的帮助",
+			@"footerText" : @"欢迎您使用 MSettings\n\nMSettings 是一个深度系统定制插件，由 @0xJacky（新浪微博）制作\n\n感谢您的支持 ^-^\n\n注意：本插件仅供个人在 AGPL 开源协议的限制下免费使用！\n\n特别感谢 @Sunbelife 设计的图标\n\n以及 Rain. 的帮助",
 		},
 		@{
 			@"alignment" : @"2",
 			@"cell" : @"PSButtonCell",
 			@"label" : @"访问官方源主页",
 			@"action" : @"visitRepo:",
-			
+
 		},
 		@{
 			@"cell" : @"PSGroupCell",
