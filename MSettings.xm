@@ -40,7 +40,7 @@ static BOOL HideLCCamera = NO;
 static BOOL HideNCCalendar = NO;
 static BOOL HideLunarDate = NO;
 static BOOL HideNCConfigureButton = NO;
-static BOOL hideOperator = NO;
+static BOOL CustomOperator = NO;
 static NSString *customOperator;
 static NSString *customUnlockText;
 
@@ -88,7 +88,7 @@ static void initPrefs()
 		HideNCCalendar = ([prefs objectForKey:@"HideNCCalendar"] ? [[prefs objectForKey:@"HideNCCalendar"] boolValue] : HideNCCalendar );
 		HideLunarDate = ([prefs objectForKey:@"HideLunarDate"] ? [[prefs objectForKey:@"HideLunarDate"] boolValue] : HideLunarDate );
 		HideNCConfigureButton = ([prefs objectForKey:@"HideNCConfigureButton"] ? [[prefs objectForKey:@"HideNCConfigureButton"] boolValue] : HideNCConfigureButton );
-		hideOperator = ([prefs objectForKey:@"hideOperator"] ? [[prefs objectForKey:@"hideOperator"] boolValue] : hideOperator );
+		CustomOperator = ([prefs objectForKey:@"CustomOperator"] ? [[prefs objectForKey:@"CustomOperator"] boolValue] : CustomOperator );
 		customOperator = ([prefs objectForKey:@"customOperator"] ? [prefs objectForKey:@"customOperator"] : customOperator);
 		customUnlockText = ([prefs objectForKey:@"customUnlockText"] ? [prefs objectForKey:@"customUnlockText"] : customUnlockText);
 	}
@@ -230,16 +230,12 @@ static void initPrefs()
 }
 //自定义运营商
 - (void)_reallySetOperatorName:(id)arg {
-		if (!Enabled || customOperator == nil || [customOperator isEqualToString:@""])
-		{
-				%orig(arg);
-		}	else if (Enabled && hideOperator) { //隐藏
-				arg = @"";
-				%orig(arg);
-		} else if (Enabled && customOperator) {
-				arg = customOperator;
-				%orig(arg);
+	if (Enabled && CustomOperator) {
+		if (customOperator) {
+			arg = customOperator;
 		}
+	}
+	%orig(arg);
 }
 %end
 //禁止控制中心回弹

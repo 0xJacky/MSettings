@@ -122,7 +122,7 @@
 		},
 		@{
 			@"cell" : @"PSTitleValueCell",
-			@"label" : @"版本：1.6",
+			@"label" : @"版本：1.6.1",
 			@"cellClass" : @"SKTintedCell",
 		},
 		@{
@@ -373,19 +373,19 @@
 			@"PostNotification" : @"MSettings/reloadSettings",
 			@"cellClass" : @"SKTintedSwitchCell",
 		},
+    @{
+			@"cell" : @"PSGroupCell",
+			@"label" : @"",
+			@"footerText" : @"开启自定义运营商开关后请在此输入您要修改的文字或表情符号，留空为隐藏运营商。"
+		},
 		@{
 			@"cell" : @"PSSwitchCell",
 			@"default" : @NO,
 			@"defaults" : @"apt.sun.msettings",
-			@"key" : @"hideOperator",
-			@"label" : @"隐藏运营商",
+			@"key" : @"CustomOperator",
+			@"label" : @"个性化运营商",
 			@"PostNotification" : @"MSettings/reloadSettings",
 			@"cellClass" : @"SKTintedSwitchCell",
-		},
-		@{
-			@"cell" : @"PSGroupCell",
-			@"label" : @"",
-			@"footerText" : @"留空为不启用，且同时启用隐藏运营商时则会优先隐藏隐藏运营商"
 		},
 		@{
 			@"cell" : @"PSEditTextCell",
@@ -416,6 +416,11 @@
 			@"label" : @"禁用语音控制",
 			@"PostNotification" : @"MSettings/reloadSettings",
 			@"cellClass" : @"SKTintedSwitchCell",
+		},
+		@{
+			@"cell" : @"PSGroupCell",
+			@"alignment" : @"1",
+			@"label" : @"MSettings © 2016 By Jacky",
 		},
 		];
 }
@@ -517,6 +522,11 @@
 			@"label" : @"自定义解锁文字",
 			@"PostNotification" : @"MSettings/reloadSettings",
 		},
+		@{
+			@"cell" : @"PSGroupCell",
+			@"alignment" : @"1",
+			@"label" : @"MSettings © 2016 By Jacky",
+		},
 		];
 }
 @end
@@ -593,6 +603,11 @@
 			@"label" : @"隐藏农历信息",
 			@"PostNotification" : @"MSettings/reloadSettings",
 			@"cellClass" : @"SKTintedSwitchCell",
+		},
+		@{
+			@"cell" : @"PSGroupCell",
+			@"alignment" : @"1",
+			@"label" : @"MSettings © 2016 By Jacky",
 		},
 		];
 }
@@ -687,6 +702,11 @@
 			@"PostNotification" : @"MSettings/reloadSettings",
 			@"cellClass" : @"SKTintedSwitchCell",
 		},
+		@{
+			@"cell" : @"PSGroupCell",
+			@"alignment" : @"1",
+			@"label" : @"MSettings © 2016 By Jacky",
+		},
 		];
 }
 @end
@@ -768,7 +788,12 @@
 		@{
 			@"cell" : @"PSGroupCell",
 			@"alignment" : @"1",
-			@"label" : @"更改系统程序的设置后需要重启对应的程序",
+			@"label" : @"更改系统程序的设置后需要重启对应的程序\n\n",
+		},
+		@{
+			@"cell" : @"PSGroupCell",
+			@"alignment" : @"1",
+			@"label" : @"MSettings © 2016 By Jacky",
 		},
 		];
 }

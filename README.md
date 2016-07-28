@@ -3,5 +3,4 @@
 
 ##Preview
 官方源：apt.sunbelife.com
-
 插件名称： MSettings 深度优化
