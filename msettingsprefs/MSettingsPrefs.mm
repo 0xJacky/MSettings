@@ -122,7 +122,7 @@
 		},
 		@{
 			@"cell" : @"PSTitleValueCell",
-			@"label" : @"版本：1.6.1",
+			@"label" : @"版本：1.6.2",
 			@"cellClass" : @"SKTintedCell",
 		},
 		@{
@@ -156,8 +156,8 @@
 		},
 		@{
 			@"cell" : @"PSGroupCell",
-			@"alignment" : @"1",
-			@"label" : @"MSettings © 2016 By Jacky\n来自 S™ 中文源",
+			@"footerAlignment" : @"1",
+			@"footerText" : @"MSettings © 2016 Jacky\n来自 S™ 中文源",
 		},
 		];
 }
@@ -419,8 +419,8 @@
 		},
 		@{
 			@"cell" : @"PSGroupCell",
-			@"alignment" : @"1",
-			@"label" : @"MSettings © 2016 By Jacky",
+			@"footerAlignment" : @"1",
+			@"footerText" : @"MSettings © 2016 Jacky",
 		},
 		];
 }
@@ -524,8 +524,8 @@
 		},
 		@{
 			@"cell" : @"PSGroupCell",
-			@"alignment" : @"1",
-			@"label" : @"MSettings © 2016 By Jacky",
+			@"footerAlignment" : @"1",
+			@"footerText" : @"MSettings © 2016 Jacky",
 		},
 		];
 }
@@ -606,8 +606,8 @@
 		},
 		@{
 			@"cell" : @"PSGroupCell",
-			@"alignment" : @"1",
-			@"label" : @"MSettings © 2016 By Jacky",
+			@"footerAlignment" : @"1",
+			@"footerText" : @"MSettings © 2016 Jacky",
 		},
 		];
 }
@@ -704,8 +704,8 @@
 		},
 		@{
 			@"cell" : @"PSGroupCell",
-			@"alignment" : @"1",
-			@"label" : @"MSettings © 2016 By Jacky",
+			@"footerAlignment" : @"1",
+			@"footerText" : @"MSettings © 2016 Jacky",
 		},
 		];
 }
@@ -788,12 +788,12 @@
 		@{
 			@"cell" : @"PSGroupCell",
 			@"alignment" : @"1",
-			@"label" : @"更改系统程序的设置后需要重启对应的程序\n\n",
+			@"label" : @"更改系统程序的设置后需要重启对应的程序\n",
 		},
 		@{
 			@"cell" : @"PSGroupCell",
-			@"alignment" : @"1",
-			@"label" : @"MSettings © 2016 By Jacky",
+			@"footerAlignment" : @"1",
+			@"footerText" : @"MSettings © 2016 Jacky",
 		},
 		];
 }

@@ -1,5 +1,3 @@
-#define DPKG_PATH @"/var/lib/dpkg/info/apt.sun.msettings.list"
-
 static BOOL Enabled = YES;
 
 static BOOL HideGlobalLine = NO;
@@ -57,7 +55,7 @@ static void initPrefs()
 	%orig;
 }
 %end
-%ctor 
+%ctor
 {
 	CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)initPrefs, CFSTR("apt.sun.msettings/settingschanged"), NULL, CFNotificationSuspensionBehaviorCoalesce);
 	initPrefs();

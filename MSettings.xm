@@ -104,7 +104,7 @@ static void initPrefs()
 	%orig;
 	if (![manager fileExistsAtPath:DPKG_PATH]) {
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"警告"
-			message:@"MSettings 的软件包标示符被篡改！\n意味着你安装的不是来自官方源的 MSettings\n请添加 S™ 中文源（http://apt.Sunbelife.com)来获取官方版本!"
+			message:@"感谢您安装 MSettings，这是一款免费但又非常实用的系统深度定制插件，但是您的 MSettings 软件包标识符已被篡改！这意味着您正在使用着盗版插件，为了您的设备与个人隐私的安全，请添加 S™ 中文源（http://apt.Sunbelife.com)来获取官方发行的版本!特别提醒，即使检测系统被破解但仍具有法律效力，从非官方源安装的软件在使用过程中出现了任何问题与作者无关！@0xJacky 保留追究破解者法律责任的权力！"
 			delegate:nil
 			cancelButtonTitle:@"好的"
 			otherButtonTitles:nil];
@@ -125,11 +125,10 @@ static void initPrefs()
 
 //隐藏Dock背景
 %hook SBDockView
-- (void)layoutSubviews {
+-(void)setBackgroundAlpha:(double)arg1{
 	if(HideDockBg && Enabled) {
-		return;
+			%orig(0.0);
 	}
-	%orig;
 }
 %end
 
