@@ -495,6 +495,11 @@ static void initPrefs()
 	}
 	%orig;
 }
+- (void)_configureOverlayViewWithSettings:(id)arg {
+	if (HideNCConfigureButton && Enabled) {
+		arg = nil;
+	}
+}
 %end
 /* Settings */
 //设置自动置顶
