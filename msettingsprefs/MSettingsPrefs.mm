@@ -122,7 +122,7 @@
 		},
 		@{
 			@"cell" : @"PSTitleValueCell",
-			@"label" : @"版本：1.6.2",
+			@"label" : @"版本：1.6.3",
 			@"cellClass" : @"SKTintedCell",
 		},
 		@{
@@ -248,6 +248,24 @@
 			@"label" : @"隐藏文件夹背景",
 			@"PostNotification" : @"MSettings/reloadSettings",
 			@"cellClass" : @"SKTintedSwitchCell",
+		},
+		@{
+			@"cell" : @"PSSwitchCell",
+			@"default" : @NO,
+			@"defaults" : @"apt.sun.msettings",
+			@"key" : @"HideIconName",
+			@"label" : @"隐藏桌面程序名称",
+			@"PostNotification" : @"MSettings/reloadSettings",
+			@"cellClass" : @"SKTintedSwitchCell"
+		},
+		@{
+			@"cell" : @"PSSwitchCell",
+			@"default" : @NO,
+			@"defaults" : @"apt.sun.msettings",
+			@"key" : @"HideFolderName",
+			@"label" : @"隐藏文件夹名称",
+			@"PostNotification" : @"MSettings/reloadSettings",
+			@"cellClass" : @"SKTintedSwitchCell"
 		},
 		@{
 			@"cell" : @"PSGroupCell",

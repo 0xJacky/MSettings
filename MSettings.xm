@@ -21,6 +21,8 @@ static BOOL HideSwitcherBgDarkeningFactor = NO;
 static BOOL HideSwitcherCardDarkeningFactor = NO;
 static BOOL MakesSettingsTop = NO;
 static BOOL HideSetingsSearch = NO;
+static BOOL HideIconName = NO;
+static BOOL HideFolderName = NO;
 static BOOL HideAppSettings = NO;
 static BOOL HideFavorite = NO;
 static BOOL AlwaysDialPad = NO;
@@ -68,6 +70,8 @@ static void initPrefs()
 		HideSwitcherCardDarkeningFactor = ([prefs objectForKey:@"HideSwitcherCardDarkeningFactor"] ? [[prefs objectForKey:@"HideSwitcherCardDarkeningFactor"] boolValue] : HideSwitcherCardDarkeningFactor );
 		MakesSettingsTop = ([prefs objectForKey:@"MakesSettingsTop"] ? [[prefs objectForKey:@"MakesSettingsTop"] boolValue] : MakesSettingsTop );
 		HideSetingsSearch = ([prefs objectForKey:@"HideSetingsSearch"] ? [[prefs objectForKey:@"HideSetingsSearch"] boolValue] : HideSetingsSearch );
+		HideIconName = ([prefs objectForKey:@"HideIconName"] ? [[prefs objectForKey:@"HideIconName"] boolValue] : HideIconName );
+		HideFolderName = ([prefs objectForKey:@"HideFolderName"] ? [[prefs objectForKey:@"HideFolderName"] boolValue] : HideFolderName );
 		HideAppSettings = ([prefs objectForKey:@"HideAppSettings"] ? [[prefs objectForKey:@"HideAppSettings"] boolValue] : HideAppSettings );
 		HideFavorite = ([prefs objectForKey:@"HideFavorite"] ? [[prefs objectForKey:@"HideFavorite"] boolValue] : HideFavorite );
 		AlwaysDialPad = ([prefs objectForKey:@"AlwaysDialPad"] ? [[prefs objectForKey:@"AlwaysDialPad"] boolValue] : AlwaysDialPad );
@@ -104,7 +108,7 @@ static void initPrefs()
 	%orig;
 	if (![manager fileExistsAtPath:DPKG_PATH]) {
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"警告"
-			message:@"感谢您安装 MSettings，这是一款免费但又非常实用的系统深度定制插件，但是您的 MSettings 软件包标识符已被篡改！这意味着您正在使用着盗版插件，为了您的设备与个人隐私的安全，请添加 S™ 中文源（http://apt.Sunbelife.com)来获取官方发行的版本!特别提醒，即使检测系统被破解但仍具有法律效力，从非官方源安装的软件在使用过程中出现了任何问题与作者无关！@0xJacky 保留追究破解者法律责任的权力！"
+			message:@"感谢您安装 MSettings，这是一款免费又实用的系统深度定制插件，但是您的 MSettings 软件包标识符已被篡改！这意味着您正在使用着盗版插件，为了您的设备与个人隐私的安全，请添加 S™ 中文源（http://apt.Sunbelife.com)来获取官方发行的版本!特别提醒，即使检测系统被破解但仍具有法律效力，从非官方源安装的软件在使用过程中出现了任何问题与作者无关！@0xJacky 保留追究破解者法律责任的权力！"
 			delegate:nil
 			cancelButtonTitle:@"好的"
 			otherButtonTitles:nil];
@@ -125,10 +129,11 @@ static void initPrefs()
 
 //隐藏Dock背景
 %hook SBDockView
--(void)setBackgroundAlpha:(double)arg1{
+-(void)setBackgroundAlpha:(double)arg{
 	if(HideDockBg && Enabled) {
-			%orig(0.0);
+			arg = 0.0;
 	}
+	%orig(arg);
 }
 %end
 
@@ -151,14 +156,31 @@ static void initPrefs()
 	return %orig;
 }
 %end
-
-//隐藏通知中心提供商
-%hook SBTodayViewController
-- (id)todayTableFooterView {
-	if(HideNCLogo && Enabled) {
+//隐藏桌面图标名称
+%hook SBIconLabelImageParameters
+- (id)text {
+	if(HideIconName && Enabled) {
 		return nil;
 	}
 	return %orig;
+}
+%end
+//隐藏文件夹名称
+%hook SBFolder
+- (id)displayName {
+	if(HideFolderName && Enabled) {
+		return nil;
+	}
+	return %orig;
+}
+%end
+//隐藏通知中心提供商
+%hook SBTodayTableFooterView
+- (void)setAttributionViewController:(id)arg {
+	if(HideNCLogo && Enabled) {
+		arg = nil;
+	}
+	%orig(arg);
 }
 %end
 
@@ -230,9 +252,7 @@ static void initPrefs()
 //自定义运营商
 - (void)_reallySetOperatorName:(id)arg {
 	if (Enabled && CustomOperator) {
-		if (customOperator) {
 			arg = customOperator;
-		}
 	}
 	%orig(arg);
 }
@@ -499,6 +519,7 @@ static void initPrefs()
 	if (HideNCConfigureButton && Enabled) {
 		arg = nil;
 	}
+	%orig;
 }
 %end
 /* Settings */
