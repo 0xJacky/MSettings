@@ -10,11 +10,15 @@
 #define kUrl_Repo @"http://apt.Sunbelife.com"
 #define kUrl_MailTo @"jacky-943572677@qq.com"
 #define kUrl_MailSubject @"MSettings"
+#define VERSION @"1.6.5"
 
 @interface MSettingsPrefsListController: SKTintedListController<SKListControllerProtocol>{
 }
 @end
 @interface MSettingsPrefsSpringBoardSettingsListController: SKTintedListController<SKListControllerProtocol>{
+}
+@end
+@interface MSettingsPrefsStatusbarSettingsListController: SKTintedListController<SKListControllerProtocol>{
 }
 @end
 @interface MSettingsPrefsLockScreenSettingsListController: SKTintedListController<SKListControllerProtocol>{
@@ -88,6 +92,12 @@
 		},
 		@{
 			@"cell" : @"PSLinkListCell",
+			@"label" : @"状态栏",
+			@"detail" : @"MSettingsPrefsStatusbarSettingsListController",
+			@"cellClass" : @"SKTintedCell",
+		},
+		@{
+			@"cell" : @"PSLinkListCell",
 			@"label" : @"锁定屏幕",
 			@"detail" : @"MSettingsPrefsLockScreenSettingsListController",
 			@"cellClass" : @"SKTintedCell",
@@ -122,7 +132,7 @@
 		},
 		@{
 			@"cell" : @"PSTitleValueCell",
-			@"label" : @"版本：1.6.3",
+			@"label" : [NSString stringWithFormat:@"%@%@", @"版本: ", VERSION],
 			@"cellClass" : @"SKTintedCell",
 		},
 		@{
@@ -221,6 +231,31 @@
 		@{
 			@"cell" : @"PSGroupCell",
 			@"label" : @"",
+			@"footerText" : @"快 | 慢",
+			@"footerAlignment" : @"1",
+		},
+		@{
+			@"cell" : @"PSSwitchCell",
+			@"default" : @NO,
+			@"defaults" : @"apt.sun.msettings",
+			@"key" : @"enableAnimationspeed",
+			@"label" : @"自定义系统动画速度",
+			@"PostNotification" : @"MSettings/reloadSettings",
+			@"cellClass" : @"SKTintedSwitchCell",
+		},
+		@{
+			@"cell" : @"PSSliderCell",
+			@"min" : @0.0,
+			@"max" : @1,
+			@"default" : @1,
+			@"defaults" : @"apt.sun.msettings",
+			@"PostNotification" : @"MSettings/reloadSettings",
+			@"key" : @"Animationspeed",
+			@"showValue" : @YES,
+		},
+		@{
+			@"cell" : @"PSGroupCell",
+			@"label" : @"",
 		},
 		@{
 			@"cell" : @"PSSwitchCell",
@@ -235,26 +270,8 @@
 			@"cell" : @"PSSwitchCell",
 			@"default" : @NO,
 			@"defaults" : @"apt.sun.msettings",
-			@"key" : @"HideDockBg",
-			@"label" : @"Dock 透明背景",
-			@"PostNotification" : @"MSettings/reloadSettings",
-			@"cellClass" : @"SKTintedSwitchCell",
-		},
-		@{
-			@"cell" : @"PSSwitchCell",
-			@"default" : @NO,
-			@"defaults" : @"apt.sun.msettings",
-			@"key" : @"HideFolderBg",
-			@"label" : @"隐藏文件夹背景",
-			@"PostNotification" : @"MSettings/reloadSettings",
-			@"cellClass" : @"SKTintedSwitchCell",
-		},
-		@{
-			@"cell" : @"PSSwitchCell",
-			@"default" : @NO,
-			@"defaults" : @"apt.sun.msettings",
 			@"key" : @"HideIconName",
-			@"label" : @"隐藏桌面程序名称",
+			@"label" : @"隐藏图标名称",
 			@"PostNotification" : @"MSettings/reloadSettings",
 			@"cellClass" : @"SKTintedSwitchCell"
 		},
@@ -266,6 +283,45 @@
 			@"label" : @"隐藏文件夹名称",
 			@"PostNotification" : @"MSettings/reloadSettings",
 			@"cellClass" : @"SKTintedSwitchCell"
+		},
+		@{
+			@"cell" : @"PSSwitchCell",
+			@"default" : @NO,
+			@"defaults" : @"apt.sun.msettings",
+			@"key" : @"HideFolderBg",
+			@"label" : @"隐藏文件夹展开时的背景",
+			@"PostNotification" : @"MSettings/reloadSettings",
+			@"cellClass" : @"SKTintedSwitchCell",
+		},
+		@{
+			@"cell" : @"PSSwitchCell",
+			@"default" : @NO,
+			@"defaults" : @"apt.sun.msettings",
+			@"key" : @"HideFolderCloseBg",
+			@"label" : @"隐藏文件夹关闭时的背景",
+			@"PostNotification" : @"MSettings/reloadSettings",
+			@"cellClass" : @"SKTintedSwitchCell"
+		},
+		@{
+			@"cell" : @"PSGroupCell",
+			@"label" : @"Dock 风格设置",
+		},
+		@{
+			 @"cell" : @"PSSegmentCell",
+			 @"default" : @1,
+			 @"defaults": @"apt.sun.msettings",
+			 @"PostNotification": @"MSettings/reloadSettings",
+			 @"key" : @"DockStyle",
+			 @"validTitles" : @[
+									 @"默认",
+									 @"去除磨砂背景",
+									 @"圆角"
+							 ],
+					 @"validValues" :@[
+									 @1,
+									 @2,
+									 @3
+							 ]
 		},
 		@{
 			@"cell" : @"PSGroupCell",
@@ -307,40 +363,10 @@
 			@"PostNotification" : @"MSettings/reloadSettings",
 			@"cellClass" : @"SKTintedSwitchCell",
 		},
+
 		@{
 			@"cell" : @"PSGroupCell",
 			@"label" : @"",
-		},
-		@{
-			@"cell" : @"PSSwitchCell",
-			@"default" : @NO,
-			@"defaults" : @"apt.sun.msettings",
-			@"key" : @"enableAnimationspeed",
-			@"label" : @"自定义系统动画持续时间",
-			@"PostNotification" : @"MSettings/reloadSettings",
-			@"cellClass" : @"SKTintedSwitchCell",
-		},
-		@{
-			@"cell" : @"PSSliderCell",
-			@"min" : @0.0,
-			@"max" : @1,
-			@"default" : @1,
-			@"defaults" : @"apt.sun.msettings",
-			@"PostNotification" : @"MSettings/reloadSettings",
-			@"key" : @"Animationspeed",
-		},
-		@{
-			@"cell" : @"PSGroupCell",
-			@"label" : @"",
-		},
-		@{
-			@"cell" : @"PSSwitchCell",
-			@"default" : @NO,
-			@"defaults" : @"apt.sun.msettings",
-			@"key" : @"HideGlobalLine",
-			@"label" : @"隐藏全局分割线",
-			@"PostNotification" : @"MSettings/reloadSettings",
-			@"cellClass" : @"SKTintedSwitchCell"
 		},
 		@{
 			@"cell" : @"PSSwitchCell",
@@ -370,6 +396,45 @@
 			@"cellClass" : @"SKTintedSwitchCell",
 		},
 		@{
+			@"cell" : @"PSSwitchCell",
+			@"default" : @NO,
+			@"defaults" : @"apt.sun.msettings",
+			@"key" : @"DisableVoiceControl",
+			@"label" : @"禁用语音控制",
+			@"PostNotification" : @"MSettings/reloadSettings",
+			@"cellClass" : @"SKTintedSwitchCell",
+		},
+		@{
+			@"cell" : @"PSGroupCell",
+			@"footerAlignment" : @"1",
+			@"footerText" : @"MSettings © 2016 Jacky",
+		},
+		];
+}
+
+@end
+
+@implementation MSettingsPrefsStatusbarSettingsListController
+
+- (UIColor*) tintColor {
+	return [UIColor darkGrayColor];
+}
+
+- (UIColor*) switchTintColor {
+	return [UIColor grayColor];
+}
+
+-(BOOL) showHeartImage { return NO; }
+-(BOOL) tintNavigationTitleText { return NO; }
+-(BOOL) shiftHeartImage { return NO; }
+
+-(NSString*) headerText { return @"StatusBar"; }
+-(NSString*) headerSubText { return @"状态栏"; }
+-(NSString*) customTitle { return @"状态栏"; }
+-(NSArray*) customSpecifiers
+{
+	return @[
+		@{
 			@"cell" : @"PSGroupCell",
 			@"label" : @"",
 		},
@@ -391,10 +456,19 @@
 			@"PostNotification" : @"MSettings/reloadSettings",
 			@"cellClass" : @"SKTintedSwitchCell",
 		},
+		@{
+			@"cell" : @"PSSwitchCell",
+			@"default" : @NO,
+			@"defaults" : @"apt.sun.msettings",
+			@"key" : @"HideBackTo",
+			@"label" : @"禁用状态栏返回上一程序",
+			@"PostNotification" : @"MSettings/reloadSettings",
+			@"cellClass" : @"SKTintedSwitchCell",
+		},
     @{
 			@"cell" : @"PSGroupCell",
 			@"label" : @"",
-			@"footerText" : @"开启自定义运营商开关后请在此输入您要修改的文字或表情符号，留空为隐藏运营商。"
+			@"footerText" : @"开启个性化运营商开关后请在此输入您要修改的文字或 Emoji，留空为隐藏运营商。"
 		},
 		@{
 			@"cell" : @"PSSwitchCell",
@@ -421,17 +495,8 @@
 			@"cell" : @"PSSwitchCell",
 			@"default" : @NO,
 			@"defaults" : @"apt.sun.msettings",
-			@"key" : @"HideBackTo",
-			@"label" : @"禁用状态栏返回上一程序",
-			@"PostNotification" : @"MSettings/reloadSettings",
-			@"cellClass" : @"SKTintedSwitchCell",
-		},
-		@{
-			@"cell" : @"PSSwitchCell",
-			@"default" : @NO,
-			@"defaults" : @"apt.sun.msettings",
-			@"key" : @"DisableVoiceControl",
-			@"label" : @"禁用语音控制",
+			@"key" : @"HideStatusBarBattery",
+			@"label" : @"隐藏电池图标",
 			@"PostNotification" : @"MSettings/reloadSettings",
 			@"cellClass" : @"SKTintedSwitchCell",
 		},
@@ -473,8 +538,8 @@
 			@"cell" : @"PSSwitchCell",
 			@"default" : @NO,
 			@"defaults" : @"apt.sun.msettings",
-			@"key" : @"HideLockScreenGrabber",
-			@"label" : @"隐藏锁屏上下横杠",
+			@"key" : @"LSSTatusBarTime",
+			@"label" : @"状态栏显示时间",
 			@"PostNotification" : @"MSettings/reloadSettings",
 			@"cellClass" : @"SKTintedSwitchCell",
 		},
@@ -483,9 +548,31 @@
 			@"default" : @NO,
 			@"defaults" : @"apt.sun.msettings",
 			@"key" : @"SameStatusBar",
-			@"label" : @"状态栏大小与桌面一致",
+			@"label" : @"状态栏大小与主屏幕一致",
 			@"PostNotification" : @"MSettings/reloadSettings",
 			@"cellClass" : @"SKTintedSwitchCell",
+		},
+		@{
+			@"cell" : @"PSGroupCell",
+			@"label" : @"",
+			@"footerText" : @"开启后个性化解锁文字开关后请输入您要修改的文字或 Emoji，留空则为隐藏解锁文字。如需使滑块显示当前时间，请输入 echoTime。\n目前默认输出的时间格式为 M月d日 a h:mm。 "
+		},
+		@{
+			@"cell" : @"PSSwitchCell",
+			@"default" : @NO,
+			@"defaults" : @"apt.sun.msettings",
+			@"key" : @"CustomUnlockText",
+			@"label" : @"个性化解锁文字",
+			@"PostNotification" : @"MSettings/reloadSettings",
+			@"cellClass" : @"SKTintedSwitchCell",
+		},
+		@{
+			@"cell" : @"PSEditTextCell",
+			@"default" : @"",
+			@"defaults" : @"apt.sun.msettings",
+			@"key" : @"customUnlockText",
+			@"label" : @"",
+			@"PostNotification" : @"MSettings/reloadSettings",
 		},
 		@{
 			@"cell" : @"PSGroupCell",
@@ -495,8 +582,17 @@
 			@"cell" : @"PSSwitchCell",
 			@"default" : @NO,
 			@"defaults" : @"apt.sun.msettings",
-			@"key" : @"HideUnlockText",
-			@"label" : @"隐藏解锁文字",
+			@"key" : @"HideLCClock",
+			@"label" : @"隐藏时间与日期",
+			@"PostNotification" : @"MSettings/reloadSettings",
+			@"cellClass" : @"SKTintedSwitchCell",
+		},
+		@{
+			@"cell" : @"PSSwitchCell",
+			@"default" : @NO,
+			@"defaults" : @"apt.sun.msettings",
+			@"key" : @"HideLockScreenGrabber",
+			@"label" : @"隐藏上下横杠",
 			@"PostNotification" : @"MSettings/reloadSettings",
 			@"cellClass" : @"SKTintedSwitchCell",
 		},
@@ -526,19 +622,6 @@
 			@"label" : @"隐藏相机按钮",
 			@"PostNotification" : @"MSettings/reloadSettings",
 			@"cellClass" : @"SKTintedSwitchCell",
-		},
-		@{
-			@"cell" : @"PSGroupCell",
-			@"label" : @"",
-			@"footerText" : @"留空为不启用，且同时启用隐藏解锁文字时则会优先隐藏解锁文字"
-		},
-		@{
-			@"cell" : @"PSEditTextCell",
-			@"default" : @"",
-			@"defaults" : @"apt.sun.msettings",
-			@"key" : @"customUnlockText",
-			@"label" : @"自定义解锁文字",
-			@"PostNotification" : @"MSettings/reloadSettings",
 		},
 		@{
 			@"cell" : @"PSGroupCell",
@@ -672,15 +755,6 @@
 			@"cellClass" : @"SKTintedSwitchCell",
 		},
 		@{
-			@"cell" : @"PSSwitchCell",
-			@"default" : @NO,
-			@"defaults" : @"apt.sun.msettings",
-			@"key" : @"HideCCAirDrop",
-			@"label" : @"隐藏 AirDrop / AirPlay",
-			@"PostNotification" : @"MSettings/reloadSettings",
-			@"cellClass" : @"SKTintedSwitchCell",
-		},
-		@{
 			@"cell" : @"PSGroupCell",
 			@"label" : @"",
 		},
@@ -708,6 +782,15 @@
 			@"defaults" : @"apt.sun.msettings",
 			@"key" : @"HideMediaControls",
 			@"label" : @"隐藏音乐控制栏",
+			@"PostNotification" : @"MSettings/reloadSettings",
+			@"cellClass" : @"SKTintedSwitchCell",
+		},
+		@{
+			@"cell" : @"PSSwitchCell",
+			@"default" : @NO,
+			@"defaults" : @"apt.sun.msettings",
+			@"key" : @"HideCCAirDrop",
+			@"label" : @"隐藏 AirDrop / AirPlay",
 			@"PostNotification" : @"MSettings/reloadSettings",
 			@"cellClass" : @"SKTintedSwitchCell",
 		},
@@ -752,16 +835,7 @@
 		@{
 			@"cell" : @"PSGroupCell",
 			@"label" : @"",
-			@"footerText" : @"开启[优化设置布局]后，打开设置时，设置页面会从顶部开始显示并且默认隐藏搜索栏，稍稍下拉即可看到搜索栏",
-		},
-		@{
-			@"cell" : @"PSSwitchCell",
-			@"default" : @NO,
-			@"defaults" : @"apt.sun.msettings",
-			@"key" : @"MakesSettingsTop",
-			@"label" : @"优化设置布局",
-			@"PostNotification" : @"MSettings/reloadSettings",
-			@"cellClass" : @"SKTintedSwitchCell",
+			@"footerText" : @"开启[优化设置布局]后，打开设置时，设置页面会从顶部开始显示并且默认隐藏搜索栏，稍稍下拉即可看到搜索栏。本功能适用于 iOS 9.0.x。",
 		},
 		@{
 			@"cell" : @"PSSwitchCell",
@@ -778,6 +852,15 @@
 			@"defaults" : @"apt.sun.msettings",
 			@"key" : @"HideAppSettings",
 			@"label" : @"隐藏设置应用程序列表",
+			@"PostNotification" : @"MSettings/reloadSettings",
+			@"cellClass" : @"SKTintedSwitchCell",
+		},
+		@{
+			@"cell" : @"PSSwitchCell",
+			@"default" : @NO,
+			@"defaults" : @"apt.sun.msettings",
+			@"key" : @"MakesSettingsTop",
+			@"label" : @"优化设置布局",
 			@"PostNotification" : @"MSettings/reloadSettings",
 			@"cellClass" : @"SKTintedSwitchCell",
 		},
@@ -804,9 +887,13 @@
 			@"cellClass" : @"SKTintedSwitchCell",
 		},
 		@{
-			@"cell" : @"PSGroupCell",
-			@"alignment" : @"1",
-			@"label" : @"更改系统程序的设置后需要重启对应的程序\n",
+			@"cell" : @"PSSwitchCell",
+			@"default" : @NO,
+			@"defaults" : @"apt.sun.msettings",
+			@"key" : @"HideVoiceEmail",
+			@"label" : @"隐藏“语音信箱”",
+			@"PostNotification" : @"MSettings/reloadSettings",
+			@"cellClass" : @"SKTintedSwitchCell",
 		},
 		@{
 			@"cell" : @"PSGroupCell",
@@ -850,7 +937,7 @@
 		@{
 			@"cell" : @"PSGroupCell",
 			@"label" : @"",
-			@"footerText" : @"欢迎您使用 MSettings\n\nMSettings 是一个深度系统定制插件，由 @0xJacky（新浪微博）制作\n\n感谢您的支持 ^-^\n\n注意：本插件仅供个人在 AGPL 开源协议的限制下免费使用！\n\n特别感谢 @Sunbelife 设计的图标\n\n以及 Rain. 的帮助",
+			@"footerText" : @"欢迎您使用 MSettings\n\nMSettings 是一个深度系统定制插件，由 @0xJacky（新浪微博）制作，感谢您的支持 ^-^\n\n注意：本插件仅供个人在 AGPL 开源协议的限制下免费使用！为了您的设备与个人隐私的安全，请添加 S™ 中文源（http://apt.Sunbelife.com)来获取官方发行的版本!\n\n特别提醒，从非官方源安装的软件在使用过程中出现了任何问题与作者无关！\n\n@0xJacky 保留追究破解者法律责任的权力！\n\n特别感谢 @Sunbelife 设计的图标\n\n以及 Rain. 的帮助",
 		},
 		@{
 			@"alignment" : @"2",
