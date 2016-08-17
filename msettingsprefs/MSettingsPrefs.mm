@@ -10,7 +10,7 @@
 #define kUrl_Repo @"http://apt.Sunbelife.com"
 #define kUrl_MailTo @"jacky-943572677@qq.com"
 #define kUrl_MailSubject @"MSettings"
-#define VERSION @"1.6.5"
+#define VERSION @"1.6.6"
 
 @interface MSettingsPrefsListController: SKTintedListController<SKListControllerProtocol>{
 }
@@ -58,7 +58,7 @@
 -(BOOL) showHeartImage { return YES; }
 -(BOOL) tintNavigationTitleText { return NO; }
 -(BOOL) shiftHeartImage { return YES; }
--(NSString*) shareMessage { return @"我正在使用 MSettings 深度系统定制插件，这个插件挺实用的！小伙伴们快添加 S™中文源（http://apt.Sunbelife.com）来下载吧~"; }
+-(NSString*) shareMessage { return @"我正在使用 MSettings 深度系统定制插件，赞！小伙伴们快添加 S™中文源（http://apt.Sunbelife.com）来下载吧~"; }
 
 -(NSString*) headerText { return @"MSettings"; }
 -(NSString*) headerSubText { return @"深度系统定制"; }
@@ -261,6 +261,38 @@
 			@"cell" : @"PSSwitchCell",
 			@"default" : @NO,
 			@"defaults" : @"apt.sun.msettings",
+			@"key" : @"HideVolumeHUDBg",
+			@"label" : @"隐藏音量浮窗背景",
+			@"PostNotification" : @"MSettings/reloadSettings",
+			@"cellClass" : @"SKTintedSwitchCell",
+		},
+		@{
+			@"cell" : @"PSSwitchCell",
+			@"default" : @NO,
+			@"defaults" : @"apt.sun.msettings",
+			@"key" : @"CustomVolumHUDShowTime",
+			@"label" : @"自定义音量浮窗显示时间",
+			@"PostNotification" : @"MSettings/reloadSettings",
+			@"cellClass" : @"SKTintedSwitchCell",
+		},
+		@{
+			@"cell" : @"PSSliderCell",
+			@"min" : @0.1,
+			@"max" : @1,
+			@"default" : @1,
+			@"defaults" : @"apt.sun.msettings",
+			@"PostNotification" : @"MSettings/reloadSettings",
+			@"key" : @"VolunmHUDShowTime",
+			@"showValue" : @YES,
+		},
+		@{
+			@"cell" : @"PSGroupCell",
+			@"label" : @"",
+		},
+		@{
+			@"cell" : @"PSSwitchCell",
+			@"default" : @NO,
+			@"defaults" : @"apt.sun.msettings",
 			@"key" : @"HideTurnPoint",
 			@"label" : @"隐藏翻页小白点",
 			@"PostNotification" : @"MSettings/reloadSettings",
@@ -283,6 +315,24 @@
 			@"label" : @"隐藏文件夹名称",
 			@"PostNotification" : @"MSettings/reloadSettings",
 			@"cellClass" : @"SKTintedSwitchCell"
+		},
+		@{
+			@"cell" : @"PSSwitchCell",
+			@"default" : @NO,
+			@"defaults" : @"apt.sun.msettings",
+			@"key" : @"HideBetaDot",
+			@"label" : @"隐藏测试版应用名称前的黄点",
+			@"PostNotification" : @"MSettings/reloadSettings",
+			@"cellClass" : @"SKTintedSwitchCell",
+		},
+		@{
+			@"cell" : @"PSSwitchCell",
+			@"default" : @NO,
+			@"defaults" : @"apt.sun.msettings",
+			@"key" : @"HideUpdatedDot",
+			@"label" : @"隐藏更新应用后名称前的蓝点",
+			@"PostNotification" : @"MSettings/reloadSettings",
+			@"cellClass" : @"SKTintedSwitchCell",
 		},
 		@{
 			@"cell" : @"PSSwitchCell",
@@ -367,6 +417,15 @@
 		@{
 			@"cell" : @"PSGroupCell",
 			@"label" : @"",
+		},
+		@{
+			@"cell" : @"PSSwitchCell",
+			@"default" : @NO,
+			@"defaults" : @"apt.sun.msettings",
+			@"key" : @"HideGlobalLine",
+			@"label" : @"隐藏全局分割线",
+			@"PostNotification" : @"MSettings/reloadSettings",
+			@"cellClass" : @"SKTintedSwitchCell",
 		},
 		@{
 			@"cell" : @"PSSwitchCell",

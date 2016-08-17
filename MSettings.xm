@@ -22,6 +22,7 @@ static BOOL HideLockScreenGrabber = NO;
 static BOOL HideSwitcherBgDarkeningFactor = NO;
 static BOOL HideSwitcherCardDarkeningFactor = NO;
 static BOOL HideIconName = NO;
+static BOOL HideBetaDot = NO;
 static BOOL HideFolderName = NO;
 static BOOL enableAnimationspeed = NO;
 static BOOL HideFolderBg  = NO;
@@ -44,16 +45,20 @@ static BOOL HideLCClock = NO;
 static BOOL CustomOperator = NO;
 static BOOL LSSTatusBarTime = NO;
 static BOOL HideStatusBarBattery = NO;
+static BOOL CustomVolumHUDShowTime = NO;
+static BOOL HideUpdatedDot = NO;
+static BOOL HideVolumeHUDBg = NO;
 static NSString *customOperator;
 static NSString *customUnlockText;
 static CGFloat Animationspeed = 0.5;
+static double VolunmHUDShowTime = 1;
 static int DockStyle = 1;
 NSFileManager *manager = [NSFileManager defaultManager];
 
 static void initPrefs()
 {
 	NSMutableDictionary *prefs = [[NSMutableDictionary alloc] initWithContentsOfFile:@"/var/mobile/Library/Preferences/apt.sun.msettings.plist"];
-	if(prefs) {
+	if (prefs) {
 		Enabled = ([prefs objectForKey:@"Enabled"] ? [[prefs objectForKey:@"Enabled"] boolValue] : Enabled );
 
 		HideTurnPoint = ([prefs objectForKey:@"HideTurnPoint"] ? [[prefs objectForKey:@"HideTurnPoint"] boolValue] : HideTurnPoint );
@@ -69,6 +74,7 @@ static void initPrefs()
 		HideSwitcherBgDarkeningFactor = ([prefs objectForKey:@"HideSwitcherBgDarkeningFactor"] ? [[prefs objectForKey:@"HideSwitcherBgDarkeningFactor"] boolValue] : HideSwitcherBgDarkeningFactor );
 		HideSwitcherCardDarkeningFactor = ([prefs objectForKey:@"HideSwitcherCardDarkeningFactor"] ? [[prefs objectForKey:@"HideSwitcherCardDarkeningFactor"] boolValue] : HideSwitcherCardDarkeningFactor );
 		HideIconName = ([prefs objectForKey:@"HideIconName"] ? [[prefs objectForKey:@"HideIconName"] boolValue] : HideIconName );
+		HideBetaDot = ([prefs objectForKey:@"HideBetaDot"] ? [[prefs objectForKey:@"HideBetaDot"] boolValue] : HideBetaDot );
 		HideFolderName = ([prefs objectForKey:@"HideFolderName"] ? [[prefs objectForKey:@"HideFolderName"] boolValue] : HideFolderName );
 		enableAnimationspeed = ([prefs objectForKey:@"enableAnimationspeed"] ? [[prefs objectForKey:@"enableAnimationspeed"] boolValue] : enableAnimationspeed );
 		Animationspeed = ([prefs objectForKey:@"Animationspeed"] ? [[prefs objectForKey:@"Animationspeed"] floatValue] : Animationspeed );
@@ -95,6 +101,10 @@ static void initPrefs()
 		customOperator = ([prefs objectForKey:@"customOperator"] ? [prefs objectForKey:@"customOperator"] : customOperator);
 		customUnlockText = ([prefs objectForKey:@"customUnlockText"] ? [prefs objectForKey:@"customUnlockText"] : customUnlockText);
 		DockStyle = ([prefs objectForKey:@"DockStyle"] ? [[prefs objectForKey:@"DockStyle"] intValue] : DockStyle );
+		HideUpdatedDot = ([prefs objectForKey:@"HideUpdatedDot"] ? [[prefs objectForKey:@"HideUpdatedDot"] boolValue] : HideUpdatedDot );
+		HideVolumeHUDBg = ([prefs objectForKey:@"HideVolumeHUDBg"] ? [[prefs objectForKey:@"HideVolumeHUDBg"] boolValue] : HideVolumeHUDBg );
+		CustomVolumHUDShowTime = ([prefs objectForKey:@"CustomVolumHUDShowTime"] ? [[prefs objectForKey:@"CustomVolumHUDShowTime"] boolValue] : CustomVolumHUDShowTime );
+		VolunmHUDShowTime = ([prefs objectForKey:@"VolunmHUDShowTime"] ? [[prefs objectForKey:@"VolunmHUDShowTime"] doubleValue] : VolunmHUDShowTime);
 	}
 
 	[prefs release];
@@ -120,7 +130,7 @@ static void initPrefs()
 //隐藏翻页小白点
 %hook SBIconListPageControl
 - (id)initWithFrame:(CGRect)arg {
-	if(HideTurnPoint && Enabled) {
+	if (HideTurnPoint && Enabled) {
 		return nil;
 	}
 	return %orig;
@@ -161,7 +171,7 @@ static void initPrefs()
 //禁用左侧搜索
 %hook SBSpotlightSettings
 - (bool)enableSpotlightOnMinusPage {
-	if(DisableLeftSearch && Enabled) {
+	if (DisableLeftSearch && Enabled) {
 		return NO;
 	}
 	return %orig;
@@ -171,7 +181,7 @@ static void initPrefs()
 //禁用下拉搜索
 %hook SBSearchScrollView
 - (bool)gestureRecognizerShouldBegin:(id)arg {
-	if(DisableDownSearch && Enabled) {
+	if (DisableDownSearch && Enabled) {
 		return NO;
 	}
 	return %orig;
@@ -180,7 +190,7 @@ static void initPrefs()
 //隐藏桌面图标名称
 %hook SBIconLabelImageParameters
 - (id)text {
-	if(HideIconName && Enabled) {
+	if (HideIconName && Enabled) {
 		return nil;
 	}
 	return %orig;
@@ -189,7 +199,7 @@ static void initPrefs()
 //隐藏文件夹名称
 %hook SBFolder
 - (id)displayName {
-	if(HideFolderName && Enabled) {
+	if (HideFolderName && Enabled) {
 		return nil;
 	}
 	return %orig;
@@ -197,7 +207,7 @@ static void initPrefs()
 %end
 %hook _SBIconWallpaperBackgroundProvider
 - (void)_updateBlurForClient:(id)arg {
-	if(HideFolderCloseBg && Enabled) {
+	if (HideFolderCloseBg && Enabled) {
 	arg = nil;
 	}
 	%orig;
@@ -205,7 +215,7 @@ static void initPrefs()
 %end
 %hook SBFolderIconImageView
 - (void)_updateAccessibilityBackgroundContrast {
-	if(HideFolderCloseBg && Enabled) {
+	if (HideFolderCloseBg && Enabled) {
 		return;
 	}
 	%orig;
@@ -214,9 +224,35 @@ static void initPrefs()
 //强制分辨率
 %hook SBApplication
 - (BOOL)supportsApplicationType:(int)arg {
-	if(ForceAppFit && Enabled)
+	if (ForceAppFit && Enabled)
 	{
 		return YES;
+	}
+	return %orig;
+}
+//隐藏测试版应用图标前的黄点Part1
+- (bool)iconIsBeta:(id)arg {
+	if (HideBetaDot && Enabled) {
+		return NO;
+	}
+	return %orig;
+}
+%end
+//图标名称圆点
+%hook SBIconBetaLabelAccessoryView
+//隐藏测试版应用图标前的黄点Part2 && 隐藏应用更新后图标前的蓝点Part1
+- (id)init {
+	if ((HideBetaDot && Enabled) || (HideUpdatedDot && Enabled)) {
+		return nil;
+	}
+	return %orig;
+}
+%end
+//隐藏应用更新后图标前的蓝点Part2
+%hook SBIconRecentlyUpdatedLabelAccessoryView
+- (id)init {
+	if (HideUpdatedDot && Enabled) {
+		return nil;
 	}
 	return %orig;
 }
@@ -224,13 +260,13 @@ static void initPrefs()
 //iOS 多任务背景去磨砂
 %hook SBAppSwitcherSettings
 - (double)deckSwitcherBackgroundDarkeningFactor {
-	if(HideSwitcherBgDarkeningFactor && Enabled) {
+	if (HideSwitcherBgDarkeningFactor && Enabled) {
 		return 0;
 	}
 	return %orig;
 }
 - (double)deckSwitcherBackgroundBlurRadius {
-	if(HideSwitcherBgDarkeningFactor && Enabled) {
+	if (HideSwitcherBgDarkeningFactor && Enabled) {
 		return 0;
 	}
 	return %orig;
@@ -239,7 +275,7 @@ static void initPrefs()
 //iOS 多任务去除主屏幕卡片磨砂
 %hook SBSwitcherWallpaperPageContentView
 - (id)wallpaperEffectView {
-	if(HideSwitcherCardDarkeningFactor && Enabled) {
+	if (HideSwitcherCardDarkeningFactor && Enabled) {
 		return nil;
 	}
 	return %orig;
@@ -318,11 +354,37 @@ static void initPrefs()
 	return %orig;
 }
 %end
+//隐藏音量浮窗背景
+%hook SBHUDView
+- (void) layoutSubviews {
+	if (HideVolumeHUDBg && Enabled) {
+		id backdropView = MSHookIvar<id>(self, "_backdropView");
+        if ([backdropView respondsToSelector:@selector(subviews)]) {
+            NSArray *subViews = [backdropView subviews];
+            for (UIView *subView in subViews) {
+                if (![subView isMemberOfClass:[%c(_UIBackdropContentView) class]]) {
+                    [subView setHidden:YES];
+                }
+            }
+        }
+    }
+    %orig;
+	}
+%end
+//音量浮窗显示时间
+%hook SBHUDController
+- (void)presentHUDView:(id)arg1 autoDismissWithDelay:(double)arg2 {
+	if (CustomVolumHUDShowTime && Enabled) {
+			arg2 = VolunmHUDShowTime;
+		}
+	%orig(arg1, arg2);
+	}
+%end
 /*状态栏*/
 //LTE标识
 %hook SBTelephonyManager
 - (bool)_lteConnectionShows4G {
-	if(ShowsLTE && Enabled) {
+	if (ShowsLTE && Enabled) {
 		return NO;
 	}
 	return %orig;
@@ -330,9 +392,22 @@ static void initPrefs()
 //自定义运营商
 - (void)_reallySetOperatorName:(id)arg {
 	if (Enabled && CustomOperator) {
+		if (![customOperator isEqualToString:@""]) {
 			arg = customOperator;
+		}
 	}
 	%orig(arg);
+}
+%end
+//隐藏运营商
+%hook SBStatusBarStateAggregator
+- (void) _updateServiceItem {
+		if (Enabled && CustomOperator) {
+			if ([customOperator isEqualToString:@""]) {
+				return;
+			}
+		}
+		return %orig;
 }
 %end
 /*锁屏*/
@@ -361,7 +436,7 @@ static void initPrefs()
 }
 //锁屏显示时间
 - (bool)shouldShowLockStatusBarTime {
-	if(LSSTatusBarTime && Enabled) {
+	if (LSSTatusBarTime && Enabled) {
 		return YES;
 	}
 	return %orig;
@@ -386,37 +461,37 @@ static void initPrefs()
 //隐藏锁屏上下横杠
 %hook SBLockScreenView
 - (void)setBottomGrabberView:(id)arg {
-	if(HideLockScreenGrabber && Enabled) {
+	if (HideLockScreenGrabber && Enabled) {
 		arg = nil;
 	}
 	%orig;
 }
 - (bool)isBottomGrabberHidden {
-	if(HideLockScreenGrabber && Enabled) {
+	if (HideLockScreenGrabber && Enabled) {
 		return NO;
 	}
 	return %orig;
 }
 - (bool)isTopGrabberHidden {
-	if((HideLockScreenGrabber && Enabled) || (LSSTatusBarTime && Enabled)) {
+	if ((HideLockScreenGrabber && Enabled) || (LSSTatusBarTime && Enabled)) {
 		return NO;
 	}
 	return %orig;
 }
 - (void)_layoutGrabberView:(id)arg1 atTop:(bool)arg2 {
-	if((HideLockScreenGrabber && Enabled) || (LSSTatusBarTime && Enabled)) {
+	if ((HideLockScreenGrabber && Enabled) || (LSSTatusBarTime && Enabled)) {
 		arg2 = 0;
 	}
 	%orig;
 }
 - (void)_addGrabberViews {
-	if(HideLockScreenGrabber && Enabled) {
+	if (HideLockScreenGrabber && Enabled) {
 		return;
 	}
 	%orig;
 }
 - (void)setTopGrabberView:(id)arg {
-	if(HideLockScreenGrabber && Enabled) {
+	if (HideLockScreenGrabber && Enabled) {
 		return;
 	}
 	%orig;
@@ -424,7 +499,7 @@ static void initPrefs()
 //锁屏 解锁文字自定义
 - (id)_defaultSlideToUnlockText {
 	if (CustomUnlockText && Enabled) {
-			if([customUnlockText isEqualToString:@"echoTime"]) {
+			if ([customUnlockText isEqualToString:@"echoTime"]) {
 				NSDate *currentDate = [NSDate date];//获取当前时间，日期
 				NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
 				[dateFormatter setDateFormat:@"M月d日 a h:mm"];
@@ -449,7 +524,7 @@ static void initPrefs()
 //锁屏 隐藏时间/充电信息等
 %hook SBLockScreenDateViewController
 - (void)loadView {
-	if(HideLCClock && Enabled) {
+	if (HideLCClock && Enabled) {
 		return;
 	}
 	%orig;
@@ -459,7 +534,7 @@ static void initPrefs()
 //隐藏通知中心提供商
 %hook SBTodayTableFooterView
 - (void)setAttributionViewController:(id)arg {
-	if(HideNCLogo && Enabled) {
+	if (HideNCLogo && Enabled) {
 		arg = nil;
 	}
 	%orig;
@@ -469,7 +544,7 @@ static void initPrefs()
 //隐藏通知中心分割线
 %hook SBNotificationSeparatorView
 - (id)initWithFrame:(struct CGRect)arg1 mode:(long long)arg2 {
-	if(HideNCLine && Enabled) {
+	if (HideNCLine && Enabled) {
 		return nil;
 	}
 	return %orig;
@@ -510,7 +585,7 @@ static void initPrefs()
 //禁止控制中心回弹
 %hook SBControlCenterSettings
 - (bool)useNewBounce {
-	if(DisableCCBounce && Enabled) {
+	if (DisableCCBounce && Enabled) {
 		return NO;
 	}
 	return %orig;
